@@ -1,0 +1,3 @@
+This Africa Business Platform project (temporary name) aims to build a platform to help Chinese businessmen in Africa to exchange business information and communicate on business issues.
+
+This project is initially proposed and promoted by [Prof. Tang, Xiaoyang](https://carnegieendowment.org/experts/870) from [Tsinghua Univesersity](https://www.sss.tsinghua.edu.cn/info/1043/4995.htm). Thanks to his efforts on it!

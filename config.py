@@ -1,0 +1,25 @@
+# flask config
+SECRET_KEY = '260000$kjF4iNQpYtVgkgak$fe0848271ff2f9c966d102cae8af6af20e0a0e798451b7dd2077ea09b30b54e4'
+
+# MySQL database config
+HOSTNAME = '127.0.0.1'
+PORT = '3306'
+DATABASE = 'africaplatform_db'
+USERNAME = 'root'
+PASSWORD = 'root'
+DB_URI = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(USERNAME, PASSWORD, HOSTNAME, PORT, DATABASE)
+SQLALCHEMY_DATABASE_URI = DB_URI
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# email config
+# MAIL_SERVER = ''
+# MAIL_PORT =
+# MAIL_USE_TLS =
+# MAIL_USE_SSL =
+# MAIL_DEBUG =
+# MAIL_USERNAME = None
+# MAIL_PASSWORD = None
+# MAIL_DEFAULT_SENDER = None
+# MAIL_MAX_EMAILS = None
+# MAIL_SUPPRESS_SEND = app.testing
+# MAIL_ASCII_ATTACHMENTS = False
