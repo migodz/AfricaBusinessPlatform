@@ -1,5 +1,5 @@
 from flask import Blueprint, request, session
-from models import User
+from models import User, Company, Chamber
 from forms import SignupForm, LoginForm, EmailForm, NewPasswordForm
 from extentions import db
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -47,6 +47,7 @@ def login():
 
     # all passed, login
     session['username'] = user.username
+    session['type'] = user.type
     return {"code": "1", "msg": "login succeeded"}
 
 
