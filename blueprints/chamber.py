@@ -1,12 +1,51 @@
-from flask import Blueprint, request, session
+from flask import Blueprint, request, session, jsonify
 from models import Chamber, User
 from extentions import db
+from forms import GetChambersForm, CreateChamberForm
 
 bp = Blueprint("chamber", __name__)
 
 
-@bp.route("/chamber/<int:cham_id>", methods=["get", "patch"])
-def chamber_info(cham_id):
+@bp.route("/c-chamber", methods=["post"])
+def create_chamber():
+    # check if already logged in
+    if "username" not in session or session.get('type') != 'cbr':
+        return {"code": "0", "msg": "no permission"}
+
+    # check if the chamber info already exists
+    user = User.query.filter_by(username=session.get('username')).first()
+    if user.cham_id and user.cham_id >= 0:
+        return {"code": "0", "msg": "cbr info already exists"}
+
+    form = CreateChamberForm(request.form)
+    # check form validation
+    if not form.validate():
+        return {"code": "0", "msg": "illegal field"}
+
+    # create chamber info
+    chamber = Chamber(
+        username=user.username,
+        name=request.form['name'],
+        country=request.form['country'],
+        address=request.form['address'],
+        telephone=request.form['telephone'],
+        email=request.form['email'],
+        wechat=request.form['telephone'],
+        link=request.form['link'],
+        intro=request.form['intro']
+    )
+    db.session.add(chamber)
+    db.session.commit()
+
+    # bind chamber id to user
+    user.cham_id = Chamber.query.filter_by(username=user.username).first().cham_id
+    db.session.commit()
+
+    return {"code": "1", "msg": "creating succeeded"}
+
+
+@bp.route("/chamber", methods=["get", "patch"])
+def chamber_info():
     # check if already logged in
     if "username" not in session:
         return {"code": "0", "msg": "no permission"}
@@ -29,7 +68,7 @@ def chamber_info(cham_id):
         if chamber:
             return {"code": "1", "msg": "succeeded", "chamber": chamber.to_dict()}
         else:
-            return {"code": "2", "msg": "cpn not exist"}
+            return {"code": "2", "msg": "cbr not exist"}
 
     # modify chamber info
     elif request.method == 'POST':
@@ -104,3 +143,18 @@ def chamber_info(cham_id):
 
         db.session.commit()
         return {"code": "1", "msg": "modification succeeded"}
+
+@bp.route("/get-chambers", methods=["get"])
+def get_chambers():
+    # check if already logged in
+    if "username" not in session:
+        return {"code": "0", "msg": "no permission"}
+
+    form = GetChambersForm(request.form)
+
+    # check form validation
+    if not form.validate():
+        return {"code": "0", "msg": "illegal field"}
+
+    chambers = Chamber.query.offset(form.offset).limit(form.limit)
+    return {"code": "1", "chambers": jsonify(chambers)}

@@ -29,7 +29,7 @@ class SignupForm(Form):
 
     def validate_nknm(self, field):
         nknm_data = field.data
-        if nknm_data == '':
+        if not nknm_data or nknm_data == '':
             return
         if len(nknm_data) < 2 or len(nknm_data) > 15:
             raise ValidationError("illegal nickname!")
@@ -58,3 +58,24 @@ class GetChambersForm(Form):
     limit = IntegerRangeField(min=1, max=30)
     offset = IntegerRangeField(min=0)
 
+
+class CreateCompanyForm(Form):
+    name = StringField(validators=[Length(min=2, max=30)])
+    country = StringField(validators=[Length(min=3, max=3)])
+    address = StringField()
+    # telephone = StringField(validators=[Length(min=3, max=20)])
+    # email = EmailField(validators=[Email()])
+    # wechat = StringField(validators=[Length(min=3, max=3)])
+    # link = StringField(validators=[Length(min=3, max=3)])
+    # intro = StringField(validators=[Length(min=3, max=3)])
+
+
+class CreateChamberForm(Form):
+    name = StringField(validators=[Length(min=2, max=30)])
+    country = StringField(validators=[Length(min=3, max=3)])
+    address = StringField()
+    # telephone = StringField(validators=[Length(min=3, max=20)])
+    # email = EmailField(validators=[Email()])
+    # wechat = StringField(validators=[Length(min=3, max=3)])
+    # link = StringField(validators=[Length(min=3, max=3)])
+    # intro = StringField(validators=[Length(min=3, max=3)])

@@ -29,6 +29,10 @@ def signup():
 
 @bp.route("/login", methods=['post'])
 def login():
+    # check if already logged in
+    if session.get("username"):
+        return {"code": "0", "msg": "already logged in"}
+
     form = LoginForm(request.form)
 
     # check form validation
@@ -48,7 +52,23 @@ def login():
     # all passed, login
     session['username'] = user.username
     session['type'] = user.type
-    return {"code": "1", "msg": "login succeeded"}
+
+    # check user type
+    nxt = ""
+    if user.type == 'usr':
+        nxt = 'usr'
+    elif user.type == 'cpn':
+        if len(Company.query.filter_by(username=user.username).all()) == 0:
+            nxt = 'cpn-incomplete'
+        else:
+            nxt = 'cpn'
+    else:
+        if len(Chamber.query.filter_by(username=user.username).all()) == 0:
+            nxt = 'cbr-incomplete'
+        else:
+            nxt = 'cbr'
+
+    return {"code": "1", "msg": "login succeeded", "next": nxt}
 
 
 @bp.route("/logout", methods=['post'])
