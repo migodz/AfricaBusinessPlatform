@@ -33,6 +33,9 @@ def login():
     if session.get("username"):
         return {"code": "0", "msg": "already logged in"}
 
+    # print(request.form['usr'])
+    # print(request.form['pwd'])
+
     form = LoginForm(request.form)
 
     # check form validation

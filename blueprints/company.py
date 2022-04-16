@@ -53,7 +53,7 @@ def company_info():
     # get company info
     company = None
     if request.method == 'GET':
-        if 'comp_id' in request.args:
+        if 'comp_id' in request.args and request.args['comp_id'] != "":
             comp_id = request.args.get('comp_id')
             company = Company.query.filter_by(comp_id=comp_id).first()
         elif 'usr' in request.args:
@@ -66,7 +66,7 @@ def company_info():
             company = Company.query.filter_by(comp_id=user.comp_id).first()
 
         if company:
-            return {"code": "1", "msg": "succeeded", "company": company.as_dict()}
+            return {"code": "1", "msg": "succeeded", "company": company.to_dict()}
         else:
             return {"code": "2", "msg": "cpn not exist"}
 

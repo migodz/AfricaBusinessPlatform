@@ -59,7 +59,7 @@ class Company(db.Model):
     intro = db.Column(db.String(200))
     signup_time = db.Column(db.DateTime, default=datetime.now())
 
-    def as_dict(self):
+    def to_dict(self):
         res = {}
         res['comp_id'] = self.comp_id
         res['username'] = self.username
@@ -90,6 +90,21 @@ class Chamber(db.Model):
     link = db.Column(db.String(200))
     intro = db.Column(db.String(200))
     signup_time = db.Column(db.DateTime, default=datetime.now())
+
+    def to_dict(self):
+        res = {}
+        res['cham_id'] = self.cham_id
+        res['username'] = self.username
+        res['name'] = self.name
+        res['country'] = self.country
+        res['address'] = self.address
+        res['telephone'] = self.telephone
+        res['email'] = self.email
+        res['wechat'] = self.wechat
+        res['link'] = self.link
+        res['intro'] = self.intro
+        res['signup_time'] = self.signup_time
+        return res
 
 
 @dataclass

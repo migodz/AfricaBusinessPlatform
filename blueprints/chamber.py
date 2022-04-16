@@ -44,7 +44,7 @@ def create_chamber():
     return {"code": "1", "msg": "creating succeeded"}
 
 
-@bp.route("/chamber", methods=["get", "patch"])
+@bp.route("/chamber", methods=["get", "post"])
 def chamber_info():
     # check if already logged in
     if "username" not in session:
@@ -53,7 +53,7 @@ def chamber_info():
     # get chamber info
     if request.method == 'GET':
         chamber = None
-        if 'cham_id' in request.args:
+        if 'cham_id' in request.args and request.args['cham_id'] != "":
             cham_id = request.args.get('cham_id')
             chamber = Chamber.query.filter_by(cham_id=cham_id).first()
         elif 'usr' in request.args:
@@ -62,7 +62,7 @@ def chamber_info():
             if not user:
                 return {"code": "2", "msg": "usr not exist"}
             elif user.type != 'cbr':
-                return {"code": "2", "msg": "usr type not cpn"}
+                return {"code": "2", "msg": "usr type not cbr"}
             chamber = Chamber.query.filter_by(cham_id=user.cham_id).first()
 
         if chamber:
@@ -72,7 +72,7 @@ def chamber_info():
 
     # modify chamber info
     elif request.method == 'POST':
-        if session.get('type') != 'cpn':
+        if session.get('type') != 'cbr':
             return {"code": "0", "msg": "no permission"}
         user = User.query.filter_by(username=session.get('username')).first()
         chamber = Chamber.query.filter_by(cham_id=user.cham_id).first()
